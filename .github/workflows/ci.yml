@@ -23,7 +23,7 @@ jobs:
         uses: sbt/setup-sbt@v1
 
       - name: Set up Rust and WebAssembly tools
-        uses: taiki-e/install-action@v2
+        uses: taiki-e/install-action@v2.85.5
         with:
           tool: |
             rust
