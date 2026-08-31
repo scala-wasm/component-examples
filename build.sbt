@@ -67,8 +67,7 @@ lazy val spinTodo = project
   .settings(
     name := "spin-todo",
     moduleName := "spin-todo",
-    resolvers += "Sonatype Central Snapshots" at "https://central.sonatype.com/repository/maven-snapshots/",
-    libraryDependencies += "org.typelevel" %% "jawn-ast" % "1.6.0-240-05f7211-SNAPSHOT",
+    libraryDependencies += "org.typelevel" %% "jawn-ast" % "1.7.0",
     scalaJSWitWorld := Some("todo"),
     scalaJSWitPackage := Some("spintodo")
   )
