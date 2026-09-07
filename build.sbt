@@ -3,7 +3,7 @@ import org.scalajs.linker.interface.ESVersion
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "io.github.scala-wasm"
-ThisBuild / scalaVersion := "2.13.18"
+ThisBuild / scalaVersion := "3.9.0"
 
 lazy val componentSettings = Seq(
   wasmEnv := Def.uncached {
