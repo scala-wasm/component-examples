@@ -37,7 +37,7 @@ jobs:
         run: rustup target add wasm32-wasip2
 
       - name: Install wit-bindgen-scala
-        run: cargo install wit-bindgen-scala --version 0.1.0-rc.2 --locked
+        run: cargo install wit-bindgen-scala --version 0.1.0 --locked
 
       - name: Run helloworld
         run: sbt helloworld/run
