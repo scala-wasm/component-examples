@@ -6,8 +6,8 @@ Examples for compiling Scala to WebAssembly components with [scala-wasm](https:/
 
 - [Wasmtime](https://wasmtime.dev/)
 - [wasm-tools](https://github.com/bytecodealliance/wasm-tools)
-- (scala-wasm version of) [wit-bindgen](https://github.com/scala-wasm/wit-bindgen)
-  - `cargo install --git https://github.com/scala-wasm/wit-bindgen --tag scala-wasm-wasm.4`
+- [wit-bindgen-scala](https://github.com/scala-wasm/wit-bindgen-scala)
+  - `cargo install wit-bindgen-scala --version 0.1.0-rc.2`
 - [cargo-component](https://github.com/bytecodealliance/cargo-component)
 - [wac](https://github.com/bytecodealliance/wac)
 - [wkg](https://github.com/bytecodealliance/wasm-pkg-tools)

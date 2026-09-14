@@ -2,11 +2,11 @@ package spintodo
 
 import scala.collection.mutable
 import scala.scalajs.{wit => wm}
-import scala.scalajs.wasi.http.types._
+import scala.scalajs.wit.unsigned.UByte
+import spintodo.wasi.http.v0_2_0.types._
 import scala.util.control.NonFatal
 
 import org.typelevel.jawn.ast.{JBool, JObject, JParser, JValue}
-import WitConversion._
 
 object ServerHandler {
   def handle(request: IncomingRequest, outParam: ResponseOutparam): Unit = {
@@ -61,11 +61,13 @@ object ServerHandler {
       var eof = false
 
       while (!eof) {
-        inputStream.blockingRead(1024L).fold(
-          _ => eof = true,
-          chunk =>
+        inputStream.blockingRead(1024L) match {
+          case wm.Ok(chunk) =>
             if (chunk.length == 0) eof = true
-            else in ++= chunk)
+            else in ++= chunk.map(_.toByte)
+          case wm.Err(_) =>
+            eof = true
+        }
       }
 
       in.toArray
@@ -83,25 +85,26 @@ object ServerHandler {
   private def send(outParam: ResponseOutparam, status: Int,
       contentType: String, responseBody: String): Unit = {
     val headers = Fields.fromList(Array(
-        wm.Tuple2("content-type", contentType.getBytes("UTF-8")))).getOrElse(Fields())
+        wm.Tuple2("content-type", contentType.getBytes().asInstanceOf[Array[UByte]])
+    )).getOrElse(Fields())
     val response = OutgoingResponse(headers)
 
     response.setStatusCode(status.toShort).getOrElse(
-        throw new Error(s"failed to set response status $status"))
+      throw new Error(s"failed to set response status $status"))
 
     val body = response.body().getOrElse(
-        throw new Error("failed to obtain outgoing response body"))
+      throw new Error("failed to obtain outgoing response body"))
 
     ResponseOutparam.set(outParam, new wm.Ok(response))
 
     val out = body.write().getOrElse(
-        throw new Error("failed to get outgoing stream"))
-    out.blockingWriteAndFlush(responseBody.getBytes("UTF-8")).getOrElse(
-        throw new Error("failed to write response body"))
+      throw new Error("failed to get outgoing stream"))
+    out.blockingWriteAndFlush(responseBody.getBytes().asInstanceOf[Array[UByte]]).getOrElse(
+      throw new Error("failed to write response body"))
 
     out.close()
-    OutgoingBody.finish(body, java.util.Optional.empty[Trailers]()).getOrElse(
-        throw new Error("failed to finish outgoing body"))
+    OutgoingBody.finish(body, wm.None).getOrElse(
+      throw new Error("failed to finish outgoing body"))
   }
 
   private def normalizePath(pathWithQuery: String): String = {

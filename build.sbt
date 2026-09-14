@@ -1,12 +1,16 @@
+import org.scalajs.ir.WitScope
 import org.scalajs.jsenv.wasmtime.WasmtimeEnv
 import org.scalajs.linker.interface.ESVersion
+import org.scalajs.linker.interface.WasmComponentModuleInitializerExport
+import org.scalajs.linker.interface.WasmComponentModuleInitializerExport._
 
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "io.github.scala-wasm"
 ThisBuild / scalaVersion := "2.13.18"
+ThisBuild / resolvers += "Sonatype Central Snapshots" at "https://central.sonatype.com/repository/maven-snapshots/"
 
 lazy val componentSettings = Seq(
-  wasmEnv := Def.uncached {
+  jsEnv := Def.uncached {
     new WasmtimeEnv(
       WasmtimeEnv.Config()
         .withArgs(List(
@@ -38,16 +42,6 @@ lazy val componentSettings = Seq(
           .withWitWorld(witWorld)
       }
   },
-  // Currently, we need to set these to None for tests, as they are not needed for component linking
-  // in future, plugin should automatically handle these settings.
-  Test / scalaJSLinkerConfig := {
-    (Compile / scalaJSLinkerConfig).value
-      .withWasmFeatures { features =>
-        features
-          .withWitDirectory(None)
-          .withWitWorld(None)
-      }
-  }
 )
 
 lazy val helloworld = project
@@ -56,8 +50,18 @@ lazy val helloworld = project
   .settings(componentSettings)
   .settings(
     name := "helloworld",
+    scalaJSWitWorld := Some("command"),
+    scalaJSWitPackage := Some("example"),
     scalaJSUseMainModuleInitializer := true,
-    scalaJSWitWorld := Some("command")
+    scalaJSLinkerConfig ~= {
+      _.withWasmFeatures(
+        _.withModuleInitializerExport(Some(
+          WasmComponentModuleInitializerExport(
+            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.0")),
+            functionName = "run",
+            resultType = ResultType.ResultUnitUnit,
+          ))))
+    },
   )
 
 lazy val spinTodo = project
@@ -78,8 +82,18 @@ lazy val wasiHttpClient = project
   .settings(componentSettings)
   .settings(
     name := "wasi-http-client",
+    scalaJSWitWorld := Some("client"),
+    scalaJSWitPackage := Some("httpclient"),
     scalaJSUseMainModuleInitializer := true,
-    scalaJSWitWorld := Some("client")
+    scalaJSLinkerConfig ~= {
+      _.withWasmFeatures(
+        _.withModuleInitializerExport(Some(
+          WasmComponentModuleInitializerExport(
+            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.0")),
+            functionName = "run",
+            resultType = ResultType.ResultUnitUnit,
+          ))))
+    },
   )
 
 lazy val rustComposeScala = project
@@ -91,5 +105,15 @@ lazy val rustComposeScala = project
     moduleName := "rust-compose-scala",
     scalaJSWitDirectory := baseDirectory.value / "../wit",
     scalaJSWitWorld := Some("scala"),
-    scalaJSWitPackage := Some("rustcompose")
+    scalaJSWitPackage := Some("rustcompose"),
+    scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= {
+      _.withWasmFeatures(
+        _.withModuleInitializerExport(Some(
+          WasmComponentModuleInitializerExport(
+            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.0")),
+            functionName = "run",
+            resultType = ResultType.ResultUnitUnit,
+          ))))
+    },
   )

@@ -1,23 +1,23 @@
 package httpclient
 
-import java.util.Optional
-
-import scala.scalajs.wasi.http.{outgoing_handler, types => http}
-import scala.scalajs.wasi.io.streams.StreamError
-
-import WitConversion._
+import httpclient.wasi.http.outgoing_handler
+import httpclient.wasi.http.types._
+import httpclient.wasi.io.streams.StreamError
+import scala.scalajs.wit
 
 object HttpClient {
-  def get(authority: String, path: String): http.IncomingResponse = {
-    val request = http.OutgoingRequest(http.Fields())
+  def get(authority: String, path: String): IncomingResponse = {
+    val request = OutgoingRequest(Fields())
+
     val future = (for {
-      _ <- request.setMethod(http.Method.Get)
-      _ <- request.setScheme(Optional.of(http.Scheme.Https))
-      _ <- request.setAuthority(Optional.of(authority))
-      _ <- request.setPathWithQuery(Optional.of(path))
-      future <- outgoing_handler
-        .handle(request, Optional.empty[http.RequestOptions]())
-    } yield future).fold(err => throw new RuntimeException(s"request failed: $err"), identity)
+      _ <- request.setMethod(Method.Get)
+      _ <- request.setScheme(wit.Some(Scheme.Https))
+      _ <- request.setAuthority(wit.Some(authority))
+      _ <- request.setPathWithQuery(wit.Some(path))
+      future <- outgoing_handler.handle(request, wit.None)
+    } yield future)
+      .mapErr(err => throw new RuntimeException(s"request failed: $err"))
+      .get
 
     val pollable = future.subscribe()
     try pollable.block()
@@ -29,27 +29,29 @@ object HttpClient {
       (for {
         inner <- outer
         response <- inner
-      } yield response).fold(err => throw new RuntimeException(s"response failed: $err"), identity)
+      } yield response)
+        .mapErr(err => throw new RuntimeException(s"response failed: $err"))
+        .get
     }).getOrElse(throw new RuntimeException("response is not ready"))
   }
 
-  def readBody(response: http.IncomingResponse): String = {
-    val body = response.consume().getOrElse(
-      throw new RuntimeException("failed to consume response body"))
-    val stream = body.stream().getOrElse(
-      throw new RuntimeException("failed to open response stream"))
+  def readBody(response: IncomingResponse): String = {
+    val stream = (for {
+      body <- response.consume()
+      stream <- body.stream()
+    } yield stream).getOrElse(throw new RuntimeException("failed to read response body"))
     val bytes = scala.collection.mutable.ArrayBuffer.empty[Byte]
     var done = false
 
     while (!done) {
-      stream.blockingRead(65536L).fold(
-        {
-          case StreamError.Closed =>
-            done = true
-          case err =>
-            throw new RuntimeException(s"failed to read response body: $err")
-        },
-        chunk => bytes ++= chunk.map(_.toByte))
+      stream.blockingRead(65536L) match {
+        case wit.Ok(chunk) =>
+          bytes ++= chunk.map(_.toByte)
+        case wit.Err(StreamError.Closed) =>
+          done = true
+        case wit.Err(err) =>
+          throw new RuntimeException(s"failed to read response body: $err")
+      }
     }
 
     new String(bytes.toArray, "UTF-8")

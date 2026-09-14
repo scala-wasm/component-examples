@@ -36,8 +36,8 @@ jobs:
       - name: Install Rust WASI target
         run: rustup target add wasm32-wasip2
 
-      - name: Install wit-bindgen
-        run: cargo install --git https://github.com/scala-wasm/wit-bindgen --tag scala-wasm-wasm.4
+      - name: Install wit-bindgen-scala
+        run: cargo install wit-bindgen-scala --version 0.1.0-rc.2 --locked
 
       - name: Run helloworld
         run: sbt helloworld/run
