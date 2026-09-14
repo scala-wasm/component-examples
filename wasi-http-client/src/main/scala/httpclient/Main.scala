@@ -5,7 +5,7 @@ object Main {
     val response = HttpClient.get("httpbin.org", "/get")
     val body = HttpClient.readBody(response)
 
-    println(s"Status: ${response.status()}")
-    println(body.take(200))
+    Console.println(s"Status: ${response.status()}")
+    Console.println(body.take(200))
   }
 }
