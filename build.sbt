@@ -7,7 +7,6 @@ import org.scalajs.linker.interface.WasmComponentModuleInitializerExport._
 ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / organization := "io.github.scala-wasm"
 ThisBuild / scalaVersion := "2.13.18"
-ThisBuild / resolvers += "Sonatype Central Snapshots" at "https://central.sonatype.com/repository/maven-snapshots/"
 
 lazy val componentSettings = Seq(
   jsEnv := Def.uncached {
