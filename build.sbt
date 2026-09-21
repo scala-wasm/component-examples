@@ -10,18 +10,7 @@ ThisBuild / scalaVersion := "2.13.18"
 
 lazy val componentSettings = Seq(
   jsEnv := Def.uncached {
-    new WasmtimeEnv(
-      WasmtimeEnv.Config()
-        .withArgs(List(
-          "run",
-          "-W", "gc,function-references,exceptions",
-          "-S", "cli",
-          "-S", "inherit-env",
-          "-S", "inherit-network",
-          "-S", "tcp",
-          "-S", "http"))
-        .withEnv(envVars.value)
-      )
+    new WasmtimeEnv()
   },
   scalaJSWitDirectory := baseDirectory.value / "wit",
   Compile / scalaJSLinkerConfig := {
