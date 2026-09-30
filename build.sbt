@@ -32,20 +32,21 @@ lazy val componentSettings = Seq(
   },
 )
 
+val wasi4sVersion = "0.0.1+wasi-0.2.12"
+
 lazy val helloworld = project
   .in(file("helloworld"))
   .enablePlugins(ScalaJSPlugin, ScalaJSJUnitPlugin)
   .settings(componentSettings)
   .settings(
     name := "helloworld",
-    scalaJSWitWorld := Some("command"),
-    scalaJSWitPackage := Some("example"),
+    libraryDependencies += "io.github.scala-wasm" %% "wasi4s" % wasi4sVersion,
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
       _.withWasmFeatures(
         _.withModuleInitializerExport(Some(
           WasmComponentModuleInitializerExport(
-            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.0")),
+            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.12")),
             functionName = "run",
             resultType = ResultType.ResultUnitUnit,
           ))))
@@ -59,7 +60,10 @@ lazy val spinTodo = project
   .settings(
     name := "spin-todo",
     moduleName := "spin-todo",
-    libraryDependencies += "org.typelevel" %% "jawn-ast" % "1.7.0",
+    libraryDependencies ++= Seq(
+      "io.github.scala-wasm" %% "wasi4s" % wasi4sVersion,
+      "org.typelevel" %% "jawn-ast" % "1.7.0",
+    ),
     scalaJSWitWorld := Some("todo"),
     scalaJSWitPackage := Some("spintodo")
   )
@@ -70,14 +74,13 @@ lazy val wasiHttpClient = project
   .settings(componentSettings)
   .settings(
     name := "wasi-http-client",
-    scalaJSWitWorld := Some("client"),
-    scalaJSWitPackage := Some("httpclient"),
+    libraryDependencies += "io.github.scala-wasm" %% "wasi4s" % wasi4sVersion,
     scalaJSUseMainModuleInitializer := true,
     scalaJSLinkerConfig ~= {
       _.withWasmFeatures(
         _.withModuleInitializerExport(Some(
           WasmComponentModuleInitializerExport(
-            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.0")),
+            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.12")),
             functionName = "run",
             resultType = ResultType.ResultUnitUnit,
           ))))
@@ -90,6 +93,7 @@ lazy val rustComposeScala = project
   .settings(componentSettings)
   .settings(
     name := "rust-compose-scala",
+    libraryDependencies += "io.github.scala-wasm" %% "wasi4s" % wasi4sVersion,
     moduleName := "rust-compose-scala",
     scalaJSWitDirectory := baseDirectory.value / "../wit",
     scalaJSWitWorld := Some("scala"),
@@ -99,7 +103,7 @@ lazy val rustComposeScala = project
       _.withWasmFeatures(
         _.withModuleInitializerExport(Some(
           WasmComponentModuleInitializerExport(
-            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.0")),
+            scope = WitScope.Interface("wasi", "cli", "run", Some("0.2.12")),
             functionName = "run",
             resultType = ResultType.ResultUnitUnit,
           ))))

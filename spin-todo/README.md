@@ -2,7 +2,7 @@
 
 Spin HTTP + SQLite TODO API.
 
-The component imports `fermyon:spin/sqlite@2.0.0` and exports `wasi:http/incoming-handler@0.2.0`. WIT dependencies are fetched from `wa.dev`.
+The component imports `fermyon:spin/sqlite@2.0.0` and exports `wasi:http/incoming-handler@0.2.0` (Spin/Fermyon WIT). HTTP handler code uses [wasi4s](https://github.com/scala-wasm/wasi4s) types. WIT dependencies are fetched from `wa.dev`.
 
 ## Setup
 

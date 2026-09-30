@@ -12,4 +12,4 @@ From this directory:
 make all
 ```
 
-`make all` fetches WIT dependencies, builds the Scala component, builds the Rust component, composes them, and runs the result with Wasmtime.
+`make all` builds the Scala component, builds the Rust component, composes them with `wac plug`, and runs the result with Wasmtime.
