@@ -3,7 +3,7 @@ package spintodo
 import scala.collection.mutable
 import scala.scalajs.{wit => wm}
 import scala.scalajs.wit.unsigned.UByte
-import spintodo.wasi.http.v0_2_0.types._
+import io.github.scalawasm.wasi4s.wasi.http.types._
 import scala.util.control.NonFatal
 
 import org.typelevel.jawn.ast.{JBool, JObject, JParser, JValue}

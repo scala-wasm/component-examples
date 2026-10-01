@@ -1,8 +1,8 @@
 package httpclient
 
-import httpclient.wasi.http.outgoing_handler
-import httpclient.wasi.http.types._
-import httpclient.wasi.io.streams.StreamError
+import io.github.scalawasm.wasi4s.wasi.http.outgoing_handler
+import io.github.scalawasm.wasi4s.wasi.http.types._
+import io.github.scalawasm.wasi4s.wasi.io.streams.StreamError
 import scala.scalajs.wit
 
 object HttpClient {

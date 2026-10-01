@@ -1,5 +1,5 @@
 SCALA_MODULE := ../target/out/sjs1/scala-2.13.18/rust-compose-scala/rust-compose-scala-fastopt/main.wasm
-RUST_MODULE := rust-greeter/target/wasm32-wasip1/release/rust_greeter.wasm
+RUST_MODULE := rust-greeter/target/wasm32-wasip2/release/rust_greeter.wasm
 OUT := out.wasm
 
 fetch:
@@ -17,7 +17,7 @@ compose:
 run: compose
 	wasmtime -W gc,function-references,exceptions $(OUT)
 
-all: fetch build-scala build-rust run
+all: build-scala build-rust run
 
 clean:
 	rm -f $(OUT)
