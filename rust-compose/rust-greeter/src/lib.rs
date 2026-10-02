@@ -1,7 +1,13 @@
-#[allow(warnings)]
-mod bindings;
+mod bindings {
+    wit_bindgen::generate!({
+        world: "rust",
+    });
 
-use crate::bindings::exports::scala_wasm::rust_compose::greeter::Guest;
+    use super::Component;
+    export!(Component);
+}
+
+use bindings::exports::scala_wasm::rust_compose::greeter::Guest;
 
 struct Component;
 
@@ -13,5 +19,3 @@ impl Guest for Component {
         String::from_utf8(buffer).unwrap()
     }
 }
-
-bindings::export!(Component with_types_in bindings);

@@ -9,7 +9,7 @@ build-scala:
 	cd .. && sbt rustComposeScala/fastLinkJS
 
 build-rust:
-	cd rust-greeter && cargo component build --target wasm32-wasip2 -r
+	cd rust-greeter && cargo build --target wasm32-wasip2 --release
 
 compose:
 	wac plug --plug $(RUST_MODULE) $(SCALA_MODULE) -o $(OUT)
