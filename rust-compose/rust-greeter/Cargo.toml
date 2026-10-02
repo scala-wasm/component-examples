@@ -1,11 +1,12 @@
 [package]
 name = "rust-greeter"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
+rust-version = "1.88"
 
 [dependencies]
 ferris-says = "0.3.2"
-wit-bindgen-rt = { version = "0.44.0", features = ["bitflags"] }
+wit-bindgen = "0.62.0"
 
 [lib]
 crate-type = ["cdylib"]
@@ -16,11 +17,3 @@ opt-level = "s"
 debug = false
 strip = true
 lto = true
-
-[package.metadata.component]
-package = "scala-wasm:rust-compose"
-
-[package.metadata.component.target]
-world = "rust"
-path = "wit"
-

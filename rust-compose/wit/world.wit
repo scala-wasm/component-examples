@@ -5,8 +5,6 @@ interface greeter {
 }
 
 world scala {
-  export wasi:cli/run@0.2.12;
-
   import greeter;
 }
 

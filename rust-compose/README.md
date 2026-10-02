@@ -2,7 +2,7 @@
 
 Cross-language composition example.
 
-Scala imports a custom `greeter` interface, Rust exports it with `cargo component`, and `wac plug` links them into one runnable component.
+Scala imports a custom `greeter` interface, Rust exports it as a `wasm32-wasip2` component, and `wac plug` links them into one runnable component.
 
 ## Run
 

@@ -29,7 +29,6 @@ jobs:
             rust
             wasm-tools
             wasmtime
-            cargo-component@0.17.0
             wkg
             wac-cli
 
