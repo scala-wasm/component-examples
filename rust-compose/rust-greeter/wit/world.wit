@@ -1,9 +1,0 @@
-package scala-wasm:rust-compose;
-
-interface greeter {
-  greet: func(name: string) -> string;
-}
-
-world rust {
-  export greeter;
-}
