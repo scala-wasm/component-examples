@@ -62,7 +62,7 @@ lazy val spinTodo = project
     moduleName := "spin-todo",
     libraryDependencies ++= Seq(
       "io.github.scala-wasm" %% "wasi4s" % wasi4sVersion,
-      "org.typelevel" %% "jawn-ast" % "1.7.0",
+      "org.typelevel" %% "jawn-ast" % "1.8.0",
     ),
     scalaJSWitWorld := Some("todo"),
     scalaJSWitPackage := Some("spintodo")
