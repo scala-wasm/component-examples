@@ -11,7 +11,7 @@ Examples for compiling Scala to WebAssembly components with [scala-wasm](https:/
 - Rust [`wasm32-wasip2`](https://component-model.bytecodealliance.org/language-support/building-a-simple-component/rust.html) target (`rustup target add wasm32-wasip2`)
 - [wac](https://github.com/bytecodealliance/wac)
 - [wkg](https://github.com/bytecodealliance/wasm-pkg-tools)
-- [Spin canary](https://developer.fermyon.com/spin/v4/install)
+- [Spin canary](https://developer.fermyon.com/spin/v4/install) (for spin example)
 
 ## Examples
 
