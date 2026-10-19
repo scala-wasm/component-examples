@@ -6,7 +6,7 @@ rust-version = "1.88"
 
 [dependencies]
 ferris-says = "0.3.2"
-wit-bindgen = "0.62.0"
+wit-bindgen = "0.63.0"
 
 [lib]
 crate-type = ["cdylib"]
